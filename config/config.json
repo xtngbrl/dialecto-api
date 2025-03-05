@@ -1,38 +1,25 @@
 {
   "development": {
-   "username": "Admin",
-    "password": "",
-    "database": "dialecto",
+   "username": "dbadmin",
+    "password": "password",
+    "database": "dialecto_db",
     "host": "localhost",
     "dialect": "postgres",
     "dialectOptions": {
         "ssl": false
     },
-    "timezone": "+10:00", 
     "logging": false
   },
-  "test": {
-    "username": "Admin",
-    "password": "",
-    "database": "dialecto",
-    "host": "localhost",
-    "dialect": "postgres",
-    "dialectOptions": {
-        "ssl": false
-    },
-    "timezone": "+10:00", 
-    "logging": false
-  },
+
   "production": {
-    "username": "Admin",
-    "password": "",
-    "database": "dialecto",
+    "username": "dbadmin",
+    "password": "password",
+    "database": "dialecto_db",
     "host": "localhost",
     "dialect": "postgres",
     "dialectOptions": {
         "ssl": false
     },
-    "timezone": "+10:00", 
     "logging": false
   }
 }
