@@ -12,7 +12,7 @@ require('dotenv').config();
 const PORT = process.env.PORT;
 
 app.options('*', cors());
-app.use(cors());
+app.use(cors({}));
 app.use(bodyParser.json());
 app.use(loadDbPermission);
 app.use('/api', appRoutes);
