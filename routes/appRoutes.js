@@ -51,5 +51,24 @@ router.delete('/delete-userRole/:id', userRoleController.deleteUserRole);
 
 
 
+// --- Words CRUD ---
+const wordController = require('../controllers/wordController');
+router.post('/words', wordController.createWord);
+router.get('/words', wordController.getWords);
+router.get('/words/:id', wordController.getWord);
+router.put('/words/:id', wordController.updateWord);
+router.delete('/words/:id', wordController.deleteWord);
+
+// --- Game Progress ---
+const gameProgressController = require('../controllers/gameProgressController');
+router.post('/game-progress', gameProgressController.upsertProgress);
+router.get('/game-progress', gameProgressController.getProgress);
+router.post('/game-progress/reset', gameProgressController.resetProgress);
+
+// --- Leaderboard ---
+const leaderboardController = require('../controllers/leaderboardController');
+router.post('/leaderboard/update', leaderboardController.updateLeaderboard);
+router.get('/leaderboard', leaderboardController.getLeaderboard);
+
 module.exports = router;
 

@@ -5,20 +5,24 @@ module.exports = (sequelize, DataTypes) => {
 
   class Leaderboard extends Model {
     static associate(models){
-      Leaderboard.hasMany(models.game_progress, {
-        foreignKey: 'game_id'
-      })
+      Leaderboard.belongsTo(models.users, {
+        foreignKey: 'user_id',
+      });
     }
   }
 
   Leaderboard.init({
-    game_id: {
+    user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
-        model: 'game_progress', 
+        model: 'users',
         key: 'id'
       }
+    },
+    gameType: {
+      type: DataTypes.ENUM('shoot', 'jumbled', 'match'),
+      allowNull: false
     },
     total_score: {
       type: DataTypes.INTEGER,
@@ -34,8 +38,8 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'leaderboards',
     indexes: [
       {
-        fields: ['total_score'],
-        order: [['total_score', 'DESC']]
+        fields: ['gameType', 'total_score'],
+        order: [['gameType', 'ASC'], ['total_score', 'DESC']]
       }
     ]
   });
