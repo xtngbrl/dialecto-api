@@ -1,9 +1,9 @@
-const Word = require('../models/Word');
+const {words} = require('../models')
 
 // Create a new word
 exports.createWord = async (req, res) => {
   try {
-    const word = await Word.create(req.body);
+    const word = await words.create(req.body);
     res.status(201).json(word);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -14,7 +14,7 @@ exports.createWord = async (req, res) => {
 exports.getWords = async (req, res) => {
   try {
     const filter = req.query.type ? { where: { type: req.query.type } } : {};
-    const words = await Word.findAll(filter);
+    const words = await words.findAll(filter);
     res.json(words);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -24,7 +24,7 @@ exports.getWords = async (req, res) => {
 // Get a single word by ID
 exports.getWord = async (req, res) => {
   try {
-    const word = await Word.findByPk(req.params.id);
+    const word = await words.findByPk(req.params.id);
     if (!word) return res.status(404).json({ error: 'Word not found' });
     res.json(word);
   } catch (err) {
@@ -35,9 +35,9 @@ exports.getWord = async (req, res) => {
 // Update a word
 exports.updateWord = async (req, res) => {
   try {
-    const [updated] = await Word.update(req.body, { where: { id: req.params.id } });
+    const [updated] = await words.update(req.body, { where: { id: req.params.id } });
     if (!updated) return res.status(404).json({ error: 'Word not found' });
-    const word = await Word.findByPk(req.params.id);
+    const word = await words.findByPk(req.params.id);
     res.json(word);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -47,7 +47,7 @@ exports.updateWord = async (req, res) => {
 // Delete a word
 exports.deleteWord = async (req, res) => {
   try {
-    const deleted = await Word.destroy({ where: { id: req.params.id } });
+    const deleted = await words.destroy({ where: { id: req.params.id } });
     if (!deleted) return res.status(404).json({ error: 'Word not found' });
     res.json({ message: 'Word deleted' });
   } catch (err) {

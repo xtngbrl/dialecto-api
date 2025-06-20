@@ -1,10 +1,25 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../db'); // Adjust path if your sequelize instance is elsewhere
 
-const GameProgress = sequelize.define('GameProgress', {
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+'use strict'
+const {Model} = require('sequelize');
+
+module.exports = (sequelize, DataTypes) => {
+
+  class GameProgress extends Model {
+    static associate(models){
+      GameProgress.belongsTo(models.users, {
+        foreignKey: 'user_id',
+      })
+    }
+  }
+
+  GameProgress.init({
+ user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'users', 
+        key: 'id'
+      }
   },
   gameType: {
     type: DataTypes.ENUM('shoot', 'jumbled', 'match'),
@@ -26,25 +41,9 @@ const GameProgress = sequelize.define('GameProgress', {
     type: DataTypes.JSONB
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  sequelize,
+  modelName: 'game_progress'
 });
-
-module.exports = GameProgress;
-
-
-
-'use strict'
-const {Model} = require('sequelize');
-
-module.exports = (sequelize, DataTypes) => {
-
-  class GameProgress extends Model {
-    static associate(models){
-      GameProgress.belongsTo(models.users, {
-        foreignKey: 'userId',
-      })
-    }
-  }
-
-  
+return GameProgress;
 }

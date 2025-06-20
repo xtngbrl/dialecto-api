@@ -1,16 +1,15 @@
-const Leaderboard = require('../models/Leaderboard');
-// const User = require('../models/User'); // Uncomment if you want to include user info
+const {users, leaderboards} = require('../models')
 
 // Submit a score to the leaderboard
 exports.submitScore = async (req, res) => {
   try {
-    const { userId, gameType, score } = req.body;
-    let entry = await Leaderboard.findOne({ where: { userId, gameType } });
+    const { user_id, game_id, score } = req.body;
+    let entry = await leaderboards.findOne({ where: { userId, gameType } });
     if (!entry || score > entry.score) {
       if (entry) {
         await entry.update({ score, achievedAt: new Date() });
       } else {
-        entry = await Leaderboard.create({ userId, gameType, score });
+        entry = await leaderboards.create({ user_id, game_id, score });
       }
       return res.json(entry);
     }
@@ -23,12 +22,12 @@ exports.submitScore = async (req, res) => {
 // Get top N leaderboard entries for a game type
 exports.getLeaderboard = async (req, res) => {
   try {
-    const { gameType, limit = 10 } = req.query;
-    const entries = await Leaderboard.findAll({
-      where: { gameType },
+    const { game_id, limit = 10 } = req.query;
+    const entries = await leaderboards.findAll({
+      where: { game_id },
       order: [['score', 'DESC'], ['achievedAt', 'ASC']],
-      limit: Number(limit)
-      // include: [{ model: User, attributes: ['username'] }] // Uncomment if you want to join user info
+      limit: Number(limit),
+      include: [{ model: users, attributes: ['first_name', 'last_name'] }] 
     });
     res.json(entries);
   } catch (err) {

@@ -5,7 +5,7 @@ module.exports  = (sequelize, DataTypes) => {
 
   class Word extends Model {
     static associate(models) {
-      Word.belongsToOne(models.dialects, {
+      Word.belongsTo(models.dialects, {
         foreignKey: 'dialect_id',
       })
     }
