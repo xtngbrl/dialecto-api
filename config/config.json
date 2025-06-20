@@ -1,7 +1,7 @@
 {
   "development": {
-   "username": "dbadmin",
-    "password": "password",
+   "username": "Admin",
+    "password": "",
     "database": "dialecto_db",
     "host": "localhost",
     "dialect": "postgres",
