@@ -11,8 +11,27 @@ require('dotenv').config();
 
 const PORT = process.env.PORT;
 
-app.options('*', cors());
-app.use(cors({}));
+// app.options('*', cors());
+// app.use(cors());
+
+// Allow both localhost and hosted domain
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://www.dialecto-app.com'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // check for origins
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        } else {
+            return callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+}));
 app.use(bodyParser.json());
 app.use(loadDbPermission);
 app.use('/api', appRoutes);
