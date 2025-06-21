@@ -10,6 +10,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
       });
       
+      User.hasMany(models.user_activity, {
+        foreignKey: 'user_id',
+      });
+
+      User.hasMany(models.user_progress, {
+        foreignKey: 'user_id',
+      });
     }
   }
   

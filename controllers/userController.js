@@ -1,4 +1,4 @@
-const {users, roles, users_roles, permissions,} = require('../models');
+const {users, roles, users_roles, permissions, user_progress} = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { setTokens, clearTokens } = require('../utils/tokenUtils');
@@ -277,6 +277,37 @@ const updateProfile = async (req, res) => {
   }
 };
 
+
+const updateProgress = async (req, res) => {
+  try {
+    const { user_id, level, progress } = req.body;
+    const record = await user_progress.findOne({ where: { user_id, level } });
+
+    if (record) {
+      record.progress = progress;
+      await record.save();
+    } else {
+      await user_progress.create({ user_id, level, progress });
+    }
+
+    res.status(200).json({ message: 'Progress updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUserProgress = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const progress = await user_progress.findAll({ where: { user_id } });
+
+    res.status(200).json(progress);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 module.exports = {
   getUsers,
   getUserById,
@@ -287,5 +318,6 @@ module.exports = {
   logout,
   updateUser,
   deleteUser,
-  updateProfile
+  updateProfile,
+  updateProgress, getUserProgress 
 };

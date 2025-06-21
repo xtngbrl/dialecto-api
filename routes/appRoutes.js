@@ -6,6 +6,7 @@ const {permission , can}= require('../middleware/permissionMiddleware');
 const permissionController = require('../controllers/permissionController');
 const userRoleController = require('../controllers/userRoleController');
 const rolePermissionController = require('../controllers/rolePermissionController');
+const dashboardController = require('../controllers/dashboardController');
 
 /*const authorize = require('../middleware/authorizationMiddleware'); 
 router.use(authorize);*/
@@ -23,6 +24,17 @@ router.post('/refresh', userController.refresh);
 router.put('/update-user/:id', userController.updateUser);
 router.delete('/delete-user/:id', userController.deleteUser);
 router.put('/update-profile', userController.updateProfile);
+router.post("/progress", userController.updateProgress);
+router.get("/progress/:user_id", userController.getUserProgress);
+
+
+// Dashboard functions 
+router.get('/dashboard/total-users', dashboardController.getTotalusers);
+router.get('/dashboard/total-active-users', dashboardController.getTotalActiveusers);
+router.get('/dashboard/top-contributors', dashboardController.getTopContributors);
+router.get('/dashboard/recently-active-users', dashboardController.getRecentlyActiveusers);
+router.get('/dashboard/top-students-progress', dashboardController.getTopStudentsProgressGraph);
+
 
 // CRUD Routes for Role
 router.get('/roles', roleController.getRoles);
