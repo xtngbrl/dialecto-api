@@ -1,24 +1,29 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const loadDbPermission = require('./middleware/loadUserPermissionMiddleware');
-const appRoutes = require('./routes/appRoutes');
-const db = require('./models');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const loadDbPermission = require("./middleware/loadUserPermissionMiddleware");
+const appRoutes = require("./routes/appRoutes");
+const db = require("./models");
 
 const app = express();
 
-require('dotenv').config();
+require("dotenv").config();
 
 const PORT = process.env.PORT;
 
-app.options('*', cors());
-app.use(cors({}));
+app.options("*", cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(loadDbPermission);
-app.use('/api', appRoutes);
+app.use("/api", appRoutes);
 
-app.get('/', function (req, res) {
-    const htmlResponse = `
+app.get("/", function (req, res) {
+  const htmlResponse = `
               <!DOCTYPE html>
               <html lang="en">
               <head>
@@ -69,8 +74,7 @@ app.get('/', function (req, res) {
               </body>
               </html>
           `;
-    res.send(htmlResponse);
-  });
+  res.send(htmlResponse);
+});
 
-app.listen(PORT)
-
+app.listen(PORT);
