@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const loadDbPermission = require('./middleware/loadUserPermissionMiddleware');
 const appRoutes = require('./routes/appRoutes');
+const dbCommandRoutes = require('./routes/migrationRoutes');
 const db = require('./models');
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(loadDbPermission);
 app.use('/api', appRoutes);
+app.use('/db', dbCommandRoutes);
 
 app.get('/', function (req, res) {
     const htmlResponse = `
