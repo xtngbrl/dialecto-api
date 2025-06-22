@@ -80,7 +80,8 @@ router.post('/game-progress/reset', gameProgressController.resetProgress);
 // --- Leaderboard ---
 const leaderboardController = require('../controllers/leaderboardController');
 router.post('/leaderboard/update', leaderboardController.updateLeaderboard);
-router.get('/leaderboard', leaderboardController.getLeaderboard);
+router.get('/leaderboard/gameType', leaderboardController.getLeaderboard);
+router.get('/leaderboards', leaderboardController.getAllUsersTotalLeaderboard);
 
 module.exports = router;
 

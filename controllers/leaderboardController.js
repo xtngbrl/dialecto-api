@@ -20,6 +20,26 @@ exports.updateLeaderboard = async (req, res) => {
   }
 };
 
+// Get total leaderboard scores for all users (sum across all gameTypes)
+exports.getAllUsersTotalLeaderboard = async (req, res) => {
+  try {
+    const entries = await leaderboards.findAll({
+      attributes: [
+        'user_id',
+        [leaderboards.sequelize.fn('SUM', leaderboards.sequelize.col('total_score')), 'total_score']
+      ],
+      group: ['user_id', 'user.id'],
+      order: [
+        [leaderboards.sequelize.fn('SUM', leaderboards.sequelize.col('total_score')), 'DESC']
+      ],
+      include: [{ model: users, attributes: ['first_name', 'last_name', 'id'] }]
+    });
+    res.json(entries);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Get top N leaderboard entries for a game type
 exports.getLeaderboard = async (req, res) => {
   try {
