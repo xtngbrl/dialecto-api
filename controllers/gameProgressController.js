@@ -23,7 +23,7 @@ exports.upsertProgress = async (req, res) => {
         attempts: 1
       });
     }
-    res.satus(201).json(progress);
+    res.status(201).json(progress);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
