@@ -17,6 +17,14 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.user_progress, {
         foreignKey: 'user_id',
       });
+
+      User.hasMany(models.game_progress, {
+        foreignKey: 'user_id'
+      });
+
+      User.hasMany(models.leaderboards, {
+        foreignKey: "user_id",
+      })
     }
   }
   

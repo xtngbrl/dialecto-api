@@ -21,13 +21,6 @@ module.exports = {
         type: Sequelize.ENUM('active', 'inactive'),
         allowNull: false
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: { model: 'users', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
