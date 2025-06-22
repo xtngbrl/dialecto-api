@@ -15,9 +15,9 @@ module.exports = {
     for (let i = 0; i < 10; i++) {
       const password = 'student123'; 
       users.push({
-        first_name: faker.name.firstName(),
-        last_name: faker.name.lastName(),
-        username: faker.internet.userName() + Date.now() + i,
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        username: faker.internet.username() + Date.now() + i,
         email: faker.internet.email(),
         password: bcrypt.hashSync(password, 10), // hashes the test passwords for security 
         createdAt: now,
