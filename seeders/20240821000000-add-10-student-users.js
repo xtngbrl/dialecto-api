@@ -1,5 +1,5 @@
 'use strict';
-const faker = require('faker'); // library for creating random fake names 
+const { faker } = require('@faker-js/faker'); // library for creating random fake names 
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
