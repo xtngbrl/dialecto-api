@@ -1,5 +1,6 @@
 'use strict';
 const { faker } = require('@faker-js/faker'); // library for creating random fake names 
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
