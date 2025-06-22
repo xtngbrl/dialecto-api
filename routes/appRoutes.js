@@ -8,8 +8,8 @@ const userRoleController = require('../controllers/userRoleController');
 const rolePermissionController = require('../controllers/rolePermissionController');
 const dashboardController = require('../controllers/dashboardController');
 
-/*const authorize = require('../middleware/authorizationMiddleware'); 
-router.use(authorize);*/
+const authorize = require('../middleware/authorizationMiddleware'); 
+router.use(authorize);
 
 //const permit = require('../middleware/permissionMiddleware');
 
