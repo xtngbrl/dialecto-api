@@ -1,5 +1,10 @@
 const express = require('express');
 const router = express.Router();
+
+// Lightweight ping route for keep-alive
+router.get('/ping', (req, res) => {
+  res.json({ status: 'ok' });
+});
 const userController = require('../controllers/userController');
 const roleController = require('../controllers/roleController'); 
 const {permission , can}= require('../middleware/permissionMiddleware');

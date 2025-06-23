@@ -95,3 +95,25 @@ app.get('/', function (req, res) {
 
 app.listen(PORT)
 
+// Internal keep-alive ping every 13 minutes
+const http = require('http');
+const KEEP_ALIVE_INTERVAL = 13 * 60 * 1000; // 13 minutes in ms
+
+setInterval(() => {
+  const options = {
+    hostname: 'localhost',
+    port: PORT,
+    path: '/api/ping',
+    method: 'GET',
+  };
+  const req = http.request(options, (res) => {
+    // Optionally log status
+    console.log(`Keep-alive ping: ${res.statusCode}`);
+  });
+  req.on('error', (error) => {
+    // Optionally log error
+    console.error('Keep-alive ping error:', error);
+  });
+  req.end();
+}, KEEP_ALIVE_INTERVAL);
+
