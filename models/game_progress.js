@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       }
   },
   gameType: {
-    type: DataTypes.ENUM('shoot', 'jumbled', 'match'),
+    type: DataTypes.ENUM('shoot', 'jumbled', 'match', 'quiz'),
     allowNull: false
   },
   score: {
@@ -43,7 +43,8 @@ module.exports = (sequelize, DataTypes) => {
 }, {
   timestamps: true,
   sequelize,
-  modelName: 'game_progress'
+  modelName: 'game_progress',
+  tableName: 'game_progress'
 });
 return GameProgress;
 }

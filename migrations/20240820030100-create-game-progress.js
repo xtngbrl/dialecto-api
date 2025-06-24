@@ -17,7 +17,7 @@ module.exports = {
         onDelete: 'SET NULL'
       },
       gameType: {
-        type: Sequelize.ENUM('shoot', 'jumbled', 'match'),
+        type: Sequelize.ENUM('shoot', 'jumbled', 'match', 'quiz'),
         allowNull: false
       },
       score: {

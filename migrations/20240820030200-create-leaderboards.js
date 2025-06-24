@@ -17,7 +17,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       gameType: {
-        type: Sequelize.ENUM('shoot', 'jumbled', 'match'),
+        type: Sequelize.ENUM('shoot', 'jumbled', 'match', 'quiz'),
         allowNull: false
       },
       total_score: {
