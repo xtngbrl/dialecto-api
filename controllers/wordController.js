@@ -10,12 +10,29 @@ exports.createWord = async (req, res) => {
   }
 };
 
-// Get all words (optionally filter by type)
+// Get all words (optionally filter by dialectId, category, and difficulty)
 exports.getWords = async (req, res) => {
   try {
-    const filter = req.query.type ? { where: { type: req.query.type } } : {};
-    const words = await words.findAll(filter);
-    res.json(words);
+    const whereClause = {};
+    
+    // Add dialectId filter if provided
+    if (req.query.dialectId) {
+      whereClause.dialect_id = req.query.dialectId;
+    }
+    
+    // Add category filter if provided
+    if (req.query.category) {
+      whereClause.category = req.query.category;
+    }
+    
+    // Add difficulty filter if provided
+    if (req.query.difficulty) {
+      whereClause.difficulty = req.query.difficulty;
+    }
+    
+    const filter = Object.keys(whereClause).length > 0 ? { where: whereClause } : {};
+    const wordsList = await words.findAll(filter);
+    res.json(wordsList);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

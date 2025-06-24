@@ -23,6 +23,14 @@ module.exports  = (sequelize, DataTypes) => {
     word_text: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+      category: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+      difficulty: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     timestamps:true,

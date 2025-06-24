@@ -1,6 +1,26 @@
 const {users, words, game_progress, leaderboards} = require('../models')
 const { Op } = require('sequelize');
 
+// Helper function to update leaderboard after game progress changes
+const updateLeaderboardEntry = async (user_id, gameType) => {
+  try {
+    // Total all scores for this user and gameType
+    const total = await game_progress.sum('score', { where: { user_id, gameType } });
+    if (total === null) return null;
+    
+    let entry = await leaderboards.findOne({ where: { user_id, gameType } });
+    if (entry) {
+      await entry.update({ total_score: total, achievedAt: new Date() });
+    } else {
+      entry = await leaderboards.create({ user_id, gameType, total_score: total });
+    }
+    return entry;
+  } catch (err) {
+    console.error('Error updating leaderboard:', err.message);
+    return null;
+  }
+};
+
 // Create or update game progress for a user and game type
 exports.upsertProgress = async (req, res) => {
   const user_id = req.user.id;
@@ -23,6 +43,10 @@ exports.upsertProgress = async (req, res) => {
         attempts: 1
       });
     }
+    
+    // Update leaderboard after successful game progress upsert
+    await updateLeaderboardEntry(user_id, gameType);
+    
     res.status(201).json(progress);
   } catch (err) {
     res.status(400).json({ error: err.message });
