@@ -4,7 +4,8 @@ const migrationController = require('../controllers/migrationController');
 
 const authorize = require('../middleware/authorizationMiddleware'); 
 // const { permission } = require('../middleware/permissionMiddleware');
-router.use(authorize);
+// router.use(authorize);
+
 // Migration endpoints
 router.post('/migrations/up', migrationController.migrateUp);
 router.post('/migrations/down', migrationController.migrateDown);
