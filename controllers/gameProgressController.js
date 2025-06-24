@@ -31,7 +31,7 @@ exports.upsertProgress = async (req, res) => {
 
 exports.getProgress = async (req, res) => {
   try {
-    const filter = { userId: req.query.userId };
+    const filter = { user_id: req.query.userId };
     if (req.query.gameType) filter.gameType = req.query.gameType;
     const progress = await game_progress.findAll({ where: filter });
     res.status(200).json(progress);
@@ -44,7 +44,7 @@ exports.getProgress = async (req, res) => {
 exports.resetProgress = async (req, res) => {
   try {
     const { userId, gameType } = req.body;
-    const progress = await game_progress.findOne({ where: { userId, gameType } });
+    const progress = await game_progress.findOne({ where: { user_id: userId, gameType } });
     if (!progress) return res.status(404).json({ error: 'Progress not found' });
     await progress.update({ score: 0, attempts: 0, details: {} });
     res.status(201).json(progress);
