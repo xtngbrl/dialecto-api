@@ -12,10 +12,9 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        references: {
-          model: 'users', // This should match the name of the "users" table
-          key: 'id'
-        }
+        references: { model: 'users', key: 'id'},
+        onUpdate: 'CASCADE', 
+        onDelete: 'SET NULL'
       },
       last_login: {
         type: Sequelize.DATE,

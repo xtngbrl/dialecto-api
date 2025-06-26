@@ -12,10 +12,7 @@ module.exports = {
       dialect_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'dialects',
-          key: 'id',
-        },
+        references: { model: 'dialects', key: 'id'},
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },

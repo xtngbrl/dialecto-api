@@ -13,18 +13,26 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   GameProgress.init({
- user_id: {
+    user_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: 'users', 
         key: 'id'
       }
-  },
-  gameType: {
-    type: DataTypes.ENUM('shoot', 'jumbled', 'match', 'quiz'),
-    allowNull: false
-  },
+    },
+    dialect_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'dialects',
+        key: 'id'
+      }
+    },
+    gameType: {
+      type: DataTypes.ENUM('shoot', 'jumbled', 'match', 'quiz'),
+      allowNull: false
+    },
   score: {
     type: DataTypes.INTEGER,
     defaultValue: 0

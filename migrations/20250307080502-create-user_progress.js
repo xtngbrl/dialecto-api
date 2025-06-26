@@ -12,15 +12,16 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        references: {
-          model: 'users', // This should match the name of the "users" table
-          key: 'id'
-        }
+        references: { model: 'users', key: 'id'},
+        onUpdate: 'CASCADE', 
+        onDelete: 'CASCADE'
       },
       dialect_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      references: { model: 'dialects', key: 'id' }
+      references: { model: 'dialects', key: 'id' },
+        onUpdate: 'CASCADE', 
+        onDelete: 'CASCADE'
       },
       dialect_progress: {
         type: Sequelize.FLOAT, // percentage (0-100)

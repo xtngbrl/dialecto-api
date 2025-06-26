@@ -12,18 +12,16 @@ module.exports = {
       role_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        references: {
-          model: 'roles', // This should match the name of the "users" table
-          key: 'id'
-        }
+        references: { model: 'roles', key: 'id'},
+        onUpdate: 'CASCADE', 
+        onDelete: 'SET NULL'
       },
       permission_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        references: {
-          model: 'permissions', // This should match the name of the "roles" table
-          key: 'id'
-        }
+        references: { model: 'permissions', key: 'id'},
+        onUpdate: 'CASCADE', 
+        onDelete: 'SET NULL'
       },
       createdAt: {
         allowNull: false,

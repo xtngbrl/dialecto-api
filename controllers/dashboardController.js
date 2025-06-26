@@ -1,4 +1,4 @@
-const { users, user_activity, user_progress } = require('../models');
+const { users, user_activity, user_progress, sequelize, dialects } = require('../models');
 const { Op } = require('sequelize');
 
 const getTotalusers = async (req, res) => {
@@ -27,14 +27,35 @@ const getTotalActiveusers = async (req, res) => {
 
 const getTopContributors = async (req, res) => {
   try {
+    // Get number of dialects for max possible score
+    const dialectCount = await dialects.count();
+    const maxScore = 100 * dialectCount;
+
+    // Aggregate total dialect_progress per user
     const topContributors = await user_progress.findAll({
-      attributes: ['user_id', [sequelize.fn('SUM', sequelize.col('progress')), 'totalProgress']],
+      attributes: [
+        'user_id',
+        [sequelize.fn('SUM', sequelize.col('dialect_progress')), 'totalDialectProgress']
+      ],
       group: ['user_id'],
-      order: [[sequelize.literal('totalProgress'), 'DESC']],
-      limit: 5
+      order: [[sequelize.literal('totalDialectProgress'), 'DESC']],
+      limit: 5,
+      include: [{ model: users, attributes: ['username', 'email'] }]
     });
 
-    res.json(topContributors);
+    // Add percentage of max possible score
+    const result = topContributors.map(tc => {
+      const total = parseFloat(tc.get('totalDialectProgress'));
+      return {
+        user_id: tc.user_id,
+        username: tc.users?.username,
+        email: tc.users?.email,
+        totalDialectProgress: total,
+        percentageOfMax: maxScore > 0 ? ((total / maxScore) * 100).toFixed(2) : null
+      };
+    });
+
+    res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -57,8 +78,8 @@ const getRecentlyActiveusers = async (req, res) => {
 const getTopStudentsProgressGraph = async (req, res) => {
   try {
     const topStudents = await user_progress.findAll({
-      attributes: ['users_id', [sequelize.fn('SUM', sequelize.col('progress')), 'totalProgress']],
-      group: ['users_id'],
+      attributes: ['user_id', [sequelize.fn('SUM', sequelize.col('progress')), 'totalProgress']],
+      group: ['user_id'],
       order: [[sequelize.literal('totalProgress'), 'DESC']],
       limit: 5,
       include: [{ model: users, attributes: ['username'] }]
