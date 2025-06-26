@@ -18,6 +18,11 @@ module.exports  = (sequelize, DataTypes) => {
         },
         dialect_description: {
             type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: "Description unavailable — this dialect has not been added to the game yet." 
+        },
+        no_of_games: {
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         dialect_status: {

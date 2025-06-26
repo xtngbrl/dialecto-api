@@ -17,6 +17,21 @@ module.exports = {
           key: 'id'
         }
       },
+      dialect_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: { model: 'dialects', key: 'id' }
+      },
+      dialect_progress: {
+        type: Sequelize.FLOAT, // percentage (0-100)
+        allowNull: false,
+        defaultValue: 0
+      },
+      game_progress_percentages: {
+        type: Sequelize.JSONB, // e.g. { shoot: 80, jumbled: 60, match: 100, quiz: 50 }
+        allowNull: false,
+        defaultValue: {}
+      },
       level: {
         type: Sequelize.INTEGER,
         allowNull: false

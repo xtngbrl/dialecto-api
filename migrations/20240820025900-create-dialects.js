@@ -17,6 +17,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
+      no_of_games: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
       dialect_status: {
         type: Sequelize.ENUM('active', 'inactive'),
         allowNull: false

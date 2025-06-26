@@ -22,11 +22,16 @@ const updateLeaderboardEntry = async (user_id, gameType) => {
 };
 
 // Create or update game progress for a user and game type
+const { updateUserProgress } = require('./userProgressController');
+
 exports.upsertProgress = async (req, res) => {
   const user_id = req.user.id;
   try {
-    const { gameType, score, details } = req.body;
-    let progress = await game_progress.findOne({ where: { user_id, gameType } });
+    const { gameType, score, details, dialect_id } = req.body;
+    if (!dialect_id) {
+      return res.status(400).json({ error: 'dialect_id is required' });
+    }
+    let progress = await game_progress.findOne({ where: { user_id, gameType, dialect_id } });
     if (progress) {
       await progress.update({
         score,
@@ -37,15 +42,19 @@ exports.upsertProgress = async (req, res) => {
     } else {
       progress = await game_progress.create({
         user_id,
-        gameType,
+        gameType, 
         score,
         details,
-        attempts: 1
+        attempts: 1,
+        dialect_id
       });
     }
     
     // Update leaderboard after successful game progress upsert
     await updateLeaderboardEntry(user_id, gameType);
+
+    // Update user progress for this dialect
+    await updateUserProgress(user_id, dialect_id);
     
     res.status(201).json(progress);
   } catch (err) {

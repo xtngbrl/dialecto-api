@@ -88,5 +88,10 @@ router.post('/leaderboard/update', leaderboardController.updateLeaderboard);
 router.get('/leaderboard/gameType', leaderboardController.getLeaderboard);
 router.get('/leaderboards', leaderboardController.getAllUsersTotalLeaderboard);
 
+// --- Flagging ---
+const flaggingController = require('../controllers/flaggingController');
+router.post('/flag-content', flaggingController.flagContent);
+router.get('/getAll-flagged-contents', flaggingController.getAllFlaggedContents);
+
 module.exports = router;
 
