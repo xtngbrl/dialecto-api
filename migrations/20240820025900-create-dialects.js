@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false
       },
       dialect_description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: true
       },
       no_of_games: {
