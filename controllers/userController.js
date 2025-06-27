@@ -14,6 +14,10 @@ const getUsers = async (req, res) => {
           model: roles,
           attributes: ['role_name']
         },
+         {
+          model: user_progress,
+          attributes: ['dialect_progress', 'game_progress_percentages', 'progress']
+        },
       ],
       attributes: ['id', 'first_name', 'last_name', 'username', 'email']
     });
