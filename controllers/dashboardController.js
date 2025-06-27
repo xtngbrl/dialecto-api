@@ -38,7 +38,7 @@ const getTopContributors = async (req, res) => {
         [sequelize.fn('SUM', sequelize.col('dialect_progress')), 'totalDialectProgress']
       ],
       group: ['user_id'],
-      order: [[sequelize.literal('totalDialectProgress'), 'DESC']],
+      order: [[sequelize.col('totalDialectProgress'), 'DESC']],
       limit: 5,
       include: [{ model: users, attributes: ['username', 'email'] }]
     });
@@ -48,8 +48,8 @@ const getTopContributors = async (req, res) => {
       const total = parseFloat(tc.get('totalDialectProgress'));
       return {
         user_id: tc.user_id,
-        username: tc.users?.username,
-        email: tc.users?.email,
+        username: tc.user?.username,
+        email: tc.user?.email,
         totalDialectProgress: total,
         percentageOfMax: maxScore > 0 ? ((total / maxScore) * 100).toFixed(2) : null
       };
@@ -80,7 +80,7 @@ const getTopStudentsProgressGraph = async (req, res) => {
     const topStudents = await user_progress.findAll({
       attributes: ['user_id', [sequelize.fn('SUM', sequelize.col('progress')), 'totalProgress']],
       group: ['user_id'],
-      order: [[sequelize.literal('totalProgress'), 'DESC']],
+      order: [[sequelize.col('totalProgress'), 'DESC']],
       limit: 5,
       include: [{ model: users, attributes: ['username'] }]
     });
