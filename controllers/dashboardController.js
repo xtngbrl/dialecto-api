@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 const getTotalusers = async (req, res) => {
   try {
     const totalusers = await users.count();
-    res.json({ totalusers });
+    res.json({ data: totalusers });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -19,7 +19,7 @@ const getTotalActiveusers = async (req, res) => {
       where: { last_login: { [Op.gte]: oneWeekAgo } }
     });
 
-    res.json({ totalActiveusers });
+    res.json({ data: totalActiveusers });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -55,7 +55,7 @@ const getTopContributors = async (req, res) => {
       };
     });
 
-    res.json(result);
+    res.json({data: result});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -69,7 +69,7 @@ const getRecentlyActiveusers = async (req, res) => {
       include: [{ model: users, attributes: ['id', 'username', 'email'] }]
     });
 
-    res.json(recentlyActiveusers);
+    res.json({data: recentlyActiveusers});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -85,7 +85,7 @@ const getTopStudentsProgressGraph = async (req, res) => {
       include: [{ model: users, attributes: ['username'] }]
     });
 
-    res.json(topStudents);
+    res.json({data: topStudents});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
