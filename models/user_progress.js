@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'user_progress',
+    tableName: 'user_progress',
     timestamps: true
   });
 
