@@ -18,6 +18,10 @@ const getUsers = async (req, res) => {
           model: user_progress,
           attributes: ['dialect_progress', 'game_progress_percentages', 'progress']
         },
+        {
+          model: user_activity,
+          attributes: ['last_login']
+        },
       ],
       attributes: ['id', 'first_name', 'last_name', 'username', 'email']
     });
