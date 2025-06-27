@@ -63,9 +63,11 @@ const getTopContributors = async (req, res) => {
 
 const getRecentlyActiveusers = async (req, res) => {
   try {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     const recentlyActiveusers = await user_activity.findAll({
+      where: { last_login: { [Op.gte]: oneWeekAgo } },
       order: [['last_login', 'DESC']],
-      limit: 5,
       include: [{ model: users, attributes: ['id', 'username', 'email'] }]
     });
 
