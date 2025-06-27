@@ -2,6 +2,7 @@ const {users, roles, users_roles, permissions, user_progress} = require('../mode
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { setTokens, clearTokens } = require('../utils/tokenUtils');
+const user_activity = require('../models/user_activity');
 const JWT_SECRET = process.env.JWT_SECRET;
 require('dotenv').config();
 
@@ -143,6 +144,8 @@ const login = async (req, res) => {
 
     setTokens(res, accessToken, refreshToken);
     res.cookie('role_name', roleName, { httpOnly: true, secure: true });
+
+    await user_activity.create({ user_id: user.id, last_login: new Date()});
 
     const roleAndpermission = user.roles.map(role => ({
       role_name: role.role_name,
