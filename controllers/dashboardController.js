@@ -84,7 +84,7 @@ const getRecentlyActiveusers = async (req, res) => {
       limit: 5,
       include: [{
         model: users,
-        attributes: ['id', 'username', 'email'],
+        attributes: ['id', 'username', 'email', 'first_name', 'last_name'],
         include: [
           {
           model: roles,
