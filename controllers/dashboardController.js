@@ -1,4 +1,4 @@
-const { users, user_activity, user_progress, sequelize, dialects } = require('../models');
+const { users, user_activity, user_progress, sequelize, dialects, roles, users_roles } = require('../models');
 const { Op } = require('sequelize');
 
 const getTotalusers = async (req, res) => {
@@ -16,7 +16,17 @@ const getTotalActiveusers = async (req, res) => {
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
     const totalActiveusers = await user_activity.count({
-      where: { last_login: { [Op.gte]: oneWeekAgo } }
+      where: { last_login: { [Op.gte]: oneWeekAgo } },
+      include: [{
+        model: users,
+        attributes: ['id', 'username', 'email'],
+        include: [{
+          model: roles,
+          through: { attributes: [] },
+          where: { role_name: 'Student' },
+          attributes: []
+        }]
+      }]
     });
 
     res.json({ data: totalActiveusers });
@@ -68,7 +78,17 @@ const getRecentlyActiveusers = async (req, res) => {
     const recentlyActiveusers = await user_activity.findAll({
       where: { last_login: { [Op.gte]: oneWeekAgo } },
       order: [['last_login', 'DESC']],
-      include: [{ model: users, attributes: ['id', 'username', 'email'] }]
+      limit: 5,
+      include: [{
+        model: users,
+        attributes: ['id', 'username', 'email'],
+        include: [{
+          model: roles,
+          through: { attributes: [] },
+          where: { role_name: 'Student' },
+          attributes: []
+        }]
+      }]
     });
 
     res.json({data: recentlyActiveusers});
