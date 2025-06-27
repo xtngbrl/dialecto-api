@@ -1,8 +1,7 @@
-const {users, roles, users_roles, permissions, user_progress} = require('../models');
+const {users, roles, users_roles, permissions, user_progress, user_activity} = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { setTokens, clearTokens } = require('../utils/tokenUtils');
-const user_activity = require('../models/user_activity');
 const JWT_SECRET = process.env.JWT_SECRET;
 require('dotenv').config();
 
