@@ -19,14 +19,17 @@ const getTotalActiveusers = async (req, res) => {
       where: { last_login: { [Op.gte]: oneWeekAgo } },
       include: [{
         model: users,
-        attributes: ['id', 'username', 'email'],
+        required: true,
         include: [{
           model: roles,
+          required: true,
           through: { attributes: [] },
           where: { role_name: 'Student' },
           attributes: []
-        }]
-      }]
+        }],
+        attributes: []
+      }],
+      distinct: true
     });
 
     res.json({ data: totalActiveusers });
@@ -82,12 +85,17 @@ const getRecentlyActiveusers = async (req, res) => {
       include: [{
         model: users,
         attributes: ['id', 'username', 'email'],
-        include: [{
+        include: [
+          {
           model: roles,
           through: { attributes: [] },
           where: { role_name: 'Student' },
           attributes: []
-        }]
+          },
+          {
+          model: user_progress
+          }
+      ]
       }]
     });
 
