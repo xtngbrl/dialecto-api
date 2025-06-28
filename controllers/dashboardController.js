@@ -15,8 +15,10 @@ const getTotalActiveusers = async (req, res) => {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-    const totalActiveusers = await user_activity.count({
+    // Get unique user IDs who have logged in within the last week and are students
+    const activeUserIds = await user_activity.findAll({
       where: { last_login: { [Op.gte]: oneWeekAgo } },
+      attributes: [[sequelize.col('user_activity.user_id'), 'user_id']],
       include: [{
         model: users,
         required: true,
@@ -29,10 +31,11 @@ const getTotalActiveusers = async (req, res) => {
         }],
         attributes: []
       }],
-      distinct: true
+      group: ['user_activity.user_id'],
+      raw: true
     });
 
-    res.json({ data: totalActiveusers });
+    res.json({ data: activeUserIds.length });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -78,28 +81,49 @@ const getRecentlyActiveusers = async (req, res) => {
   try {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    const recentlyActiveusers = await user_activity.findAll({
-      where: { last_login: { [Op.gte]: oneWeekAgo } },
-      order: [['last_login', 'DESC']],
-      limit: 5,
-      include: [{
-        model: users,
-        attributes: ['id', 'username', 'email', 'first_name', 'last_name'],
-        include: [
-          {
+
+    // Get the latest login per user in the last week using a raw query for correct grouping
+    const [results] = await sequelize.query(`
+      SELECT ua.* FROM user_activity ua
+      INNER JOIN (
+        SELECT user_id, MAX(last_login) AS last_login
+        FROM user_activity
+        WHERE last_login >= :oneWeekAgo
+        GROUP BY user_id
+      ) latest ON ua.user_id = latest.user_id AND ua.last_login = latest.last_login
+      ORDER BY ua.last_login DESC
+      LIMIT 5
+    `, {
+      replacements: { oneWeekAgo },
+      model: user_activity,
+      mapToModel: true
+    });
+
+    // Now fetch user details for these user_ids
+    const userIds = results.map(r => r.user_id);
+    const usersList = await users.findAll({
+      where: { id: userIds },
+      attributes: ['id', 'username', 'email', 'first_name', 'last_name'],
+      include: [
+        {
           model: roles,
           through: { attributes: [] },
           where: { role_name: 'Student' },
           attributes: []
-          },
-          {
+        },
+        {
           model: user_progress
-          }
+        }
       ]
-      }]
     });
 
-    res.json({data: recentlyActiveusers});
+    // Merge user_activity and user details
+    const merged = results.map(ua => {
+      const user = usersList.find(u => u.id === ua.user_id);
+      return { ...ua.toJSON(), user };
+    });
+
+    res.json({ data: merged });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
