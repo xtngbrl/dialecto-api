@@ -93,5 +93,9 @@ const flaggingController = require('../controllers/flaggingController');
 router.post('/flag-content', flaggingController.flagContent);
 router.get('/getAll-flagged-contents', flaggingController.getAllFlaggedContents);
 
+//  --- User Progress --- 
+const userProgressController = require ('../controllers/userProgressController');
+router.get('/userProgress/:user_id', userProgressController.getAllUserProgress);
+
 module.exports = router;
 

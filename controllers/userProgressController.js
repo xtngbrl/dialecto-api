@@ -76,3 +76,26 @@ exports.updateUserProgress = async (user_id, dialect_id) => {
     });
   }
 };
+
+exports.getAllUserProgress = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const progressRecords = await user_progress.findAll({
+      where: { user_id: userId },
+      attributes: ['dialect_id', 'dialect_progress', 'game_progress_percentages'],
+      order: [['dialect_id', 'ASC']]
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: progressRecords
+    });
+  } catch (error) {
+    console.error('Error fetching user progress:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch user progress'
+    });
+  }
+};
