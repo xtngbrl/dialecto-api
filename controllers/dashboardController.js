@@ -83,7 +83,7 @@ const getRecentlyActiveusers = async (req, res) => {
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
     // Get the latest login per user in the last week using a raw query for correct grouping
-    const [results] = await sequelize.query(`
+    const results = await sequelize.query(`
       SELECT ua.* FROM user_activity ua
       INNER JOIN (
         SELECT user_id, MAX(last_login) AS last_login
@@ -100,7 +100,7 @@ const getRecentlyActiveusers = async (req, res) => {
     });
 
     // Now fetch user details for these user_ids
-    const userIds = results.map(r => r.user_id);
+    const userIds = results[0].map(r => r.user_id);
     const usersList = await users.findAll({
       where: { id: userIds },
       attributes: ['id', 'username', 'email', 'first_name', 'last_name'],
@@ -118,7 +118,7 @@ const getRecentlyActiveusers = async (req, res) => {
     });
 
     // Merge user_activity and user details
-    const merged = results.map(ua => {
+    const merged = results[0].map(ua => {
       const user = usersList.find(u => u.id === ua.user_id);
       return { ...ua.toJSON(), user };
     });
