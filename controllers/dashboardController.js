@@ -15,8 +15,14 @@ const getTotalActiveusers = async (req, res) => {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
-    const totalActiveusers = await user_activity.count({
+    // Get unique user IDs who have logged in within the last week
+    const activeUsers = await user_activity.findAll({
       where: { last_login: { [Op.gte]: oneWeekAgo } },
+      attributes: [
+        'user_id',
+        [sequelize.fn('MAX', sequelize.col('last_login')), 'last_login']
+      ],
+      group: ['user_id'],
       include: [{
         model: users,
         required: true,
@@ -28,11 +34,10 @@ const getTotalActiveusers = async (req, res) => {
           attributes: []
         }],
         attributes: []
-      }],
-      distinct: true
+      }]
     });
 
-    res.json({ data: totalActiveusers });
+    res.json({ data: activeUsers.length });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -78,28 +83,35 @@ const getRecentlyActiveusers = async (req, res) => {
   try {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    const recentlyActiveusers = await user_activity.findAll({
+
+    // Get the latest login per user in the last week
+    const recentLogins = await user_activity.findAll({
       where: { last_login: { [Op.gte]: oneWeekAgo } },
-      order: [['last_login', 'DESC']],
+      attributes: [
+        'user_id',
+        [sequelize.fn('MAX', sequelize.col('last_login')), 'last_login']
+      ],
+      group: ['user_id'],
+      order: [[sequelize.fn('MAX', sequelize.col('last_login')), 'DESC']],
       limit: 5,
       include: [{
         model: users,
         attributes: ['id', 'username', 'email', 'first_name', 'last_name'],
         include: [
           {
-          model: roles,
-          through: { attributes: [] },
-          where: { role_name: 'Student' },
-          attributes: []
+            model: roles,
+            through: { attributes: [] },
+            where: { role_name: 'Student' },
+            attributes: []
           },
           {
-          model: user_progress
+            model: user_progress
           }
-      ]
+        ]
       }]
     });
 
-    res.json({data: recentlyActiveusers});
+    res.json({ data: recentLogins });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
