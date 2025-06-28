@@ -99,6 +99,13 @@ const getRecentlyActiveusers = async (req, res) => {
       mapToModel: true
     });
 
+    // Debugging output
+    console.log('sequelize.query results:', results);
+    if (results && results.length > 0) {
+      console.log('Type of results[0]:', typeof results[0]);
+      console.log('results[0]:', results[0]);
+    }
+
     // Now fetch user details for these user_ids
     const userIds = results[0].map(r => r.user_id);
     const usersList = await users.findAll({
