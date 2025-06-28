@@ -41,7 +41,7 @@ router.get('/dashboard/recently-active-users', dashboardController.getRecentlyAc
 router.get('/dashboard/top-students-progress', dashboardController.getTopStudentsProgressGraph);
 
 // --- Dialects CRUD ---
-router.post('/dialects', dashboardController.createDialect);
+router.post('/create-dialect', dashboardController.createDialect);
 router.get('/dialects', dashboardController.getDialects);
 router.get('/dialects/:id', dashboardController.getDialectById);
 router.put('/dialects/:id', dashboardController.updateDialect);
