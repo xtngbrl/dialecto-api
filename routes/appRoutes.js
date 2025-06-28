@@ -40,6 +40,17 @@ router.get('/dashboard/top-contributors', dashboardController.getTopContributors
 router.get('/dashboard/recently-active-users', dashboardController.getRecentlyActiveusers);
 router.get('/dashboard/top-students-progress', dashboardController.getTopStudentsProgressGraph);
 
+// --- Dialects CRUD ---
+router.post('/dialects', dashboardController.createDialect);
+router.get('/dialects', dashboardController.getDialects);
+router.get('/dialects/:id', dashboardController.getDialectById);
+router.put('/dialects/:id', dashboardController.updateDialect);
+router.delete('/dialects/:id', dashboardController.deleteDialect);
+
+// --- Flagged Words ---
+router.get('/flagged-words', dashboardController.getFlaggedWords);
+router.delete('/flagged-words/:id', dashboardController.deleteFlaggedWord);
+
 
 // CRUD Routes for Role
 router.get('/roles', roleController.getRoles);
