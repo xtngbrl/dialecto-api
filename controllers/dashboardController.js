@@ -107,7 +107,7 @@ const getRecentlyActiveusers = async (req, res) => {
     }
 
     // Now fetch user details for these user_ids
-    const userIds = results[0].map(r => r.user_id);
+    const userIds = results.map(r => r.user_id);
     const usersList = await users.findAll({
       where: { id: userIds },
       attributes: ['id', 'username', 'email', 'first_name', 'last_name'],
@@ -125,7 +125,7 @@ const getRecentlyActiveusers = async (req, res) => {
     });
 
     // Merge user_activity and user details
-    const merged = results[0].map(ua => {
+    const merged = results.map(ua => {
       const user = usersList.find(u => u.id === ua.user_id);
       return { ...ua.toJSON(), user };
     });
