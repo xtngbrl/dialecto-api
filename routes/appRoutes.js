@@ -106,7 +106,7 @@ router.get('/getAll-flagged-contents', flaggingController.getAllFlaggedContents)
 
 //  --- User Progress --- 
 const userProgressController = require ('../controllers/userProgressController');
-router.get('/userProgress/:user_id', userProgressController.getAllUserProgress);
+router.get('/userProgress', userProgressController.getAllUserProgress);
 
 module.exports = router;
 
