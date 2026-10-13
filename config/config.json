@@ -9,11 +9,12 @@
   },
 
   "production": {
-    "username": "dialecto_db_zoki_user",
-    "password": "gvmozKH7dz4pyuTPraJYBTIhvT8xamdz",
-    "database": "dialecto_db_zoki",
-    "host": "dpg-d1bn5c15pdvs73e20v00-a",
+    "username": "dialecto_db_ne9k_user",
+    "password": "wmpKqOUQRiBPVp3liDc5hT6kmZlC4GVi",
+    "database": "dialecto_db_ne9k",
+    "host": "dpg-db6tto8m7kps73bc0b00-a",
     "dialect": "postgres",
     "logging": false
   }
 }
+
