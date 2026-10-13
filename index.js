@@ -18,7 +18,8 @@ const PORT = process.env.PORT;
 // Allow both localhost and hosted domain
 const allowedOrigins = [
     'http://localhost:5173',
-    'https://www.dialecto-app.com'
+    'https://www.dialecto-app.com',
+    'https://dialecto-client.vercel.app'
 ];
 
 app.use(cors({
